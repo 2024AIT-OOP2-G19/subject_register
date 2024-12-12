@@ -5,8 +5,8 @@
     <title>データ一覧</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="subject_graph.js"></script>
-    <script src="user_graph.js"></script>
+    <script src="{{ url_for('static', filename='subject_graph.js') }}"></script>
+    <script src="{{ url_for('static', filename='user_graph.js') }}"></script>
 </head>
 <body>
     <h1>index</h1>
