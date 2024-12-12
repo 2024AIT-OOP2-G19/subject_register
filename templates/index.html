@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>データ一覧</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>index</h1>
@@ -12,5 +13,93 @@
       <li><a href="{{ url_for('subject.list') }}">科目リスト</a></li>
       <li><a href="{{ url_for('regist.list') }}">履修リスト</a></li>
     </ul>
+    <section class="subject_register_summary">
+      <h2>教科ごとの履修登録数</h2>
+      <canvas id="register_summary_chart"></canvas>
+    </section>
+    <section class="subject_ranking_top5">
+      <h2>履修登録ランキング(TOP5)</h2>
+      <canvas id="subject_ranking_chart" width="300" height="300"></canvas>
+    </section>
+    <script>
+      const register_summary_chart = document.getElementById('register_summary_chart');
+
+      fetch('/api/')
+
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+
+          new Chart(register_summary_chart, {
+          type: 'bar',
+          data: {
+            labels: data.labels,
+            datasets: [{
+              axis: 'y',
+              label: '履修登録数',
+              data: data.data,
+              fill: false,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+              ],
+              borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+              ],
+              borderWidth: 1
+
+            }]
+          },
+          options: {
+            responsive: true,
+            indexAxis: 'y',
+            scales: {
+              x: {
+                beginAtZero: true
+              }
+            }
+          }
+        })
+      })
+      
+      const subject_ranking_chart = document.getElementById('subject_ranking_chart');
+
+      fetch('/api/user_ranking')
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+
+        new Chart(subject_ranking_chart, {
+          type: 'doughnut',
+          data: {
+            labels: data.labels,
+            datasets: [{
+              data: data.data,
+              borderWidth: 1
+
+            }]
+          },
+          options: {
+            responsive: true,
+             plugins: {
+                legend: {
+                  position: 'right'
+                }
+             }
+          }
+        })
+      })
+    </script>
 </body>
 </html>
