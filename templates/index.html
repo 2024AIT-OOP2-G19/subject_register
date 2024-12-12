@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>データ一覧</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='subject_graph.js') }}"></script>
+    <script src="{{ url_for('static', filename='user_graph.js') }}"></script>
 </head>
 <body>
     <h1>index</h1>
@@ -12,5 +15,20 @@
       <li><a href="{{ url_for('subject.list') }}">科目リスト</a></li>
       <li><a href="{{ url_for('regist.list') }}">履修リスト</a></li>
     </ul>
+    <section class="register_summary">
+      <h3>履修登録者数</h3>
+      <canvas id="register_summary_chart"></canvas>
+    </section>
+    <section class="subject_ranking">
+      <h3>履修登録者数(TOP5)</h3>
+      <canvas id="subject_ranking_chart" width="300" height="300"></canvas>
+    </section>
+    <section class="credit_summary">
+      <h3>履修合計単位数</h3>
+      <canvas id="credit_summary_chart"></canvas>
+    <section class="credit_ranking">
+      <h3>履修合計単位数(TOP5)</h3>
+      <canvas id="credit_ranking_chart" width="300" height="300"></canvas>
+    </section>
 </body>
 </html>
