@@ -8,37 +8,54 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 # 返す型はjson
 # 教科ごとの履修登録者を返す
 # key=教科名, value=履修者の数
-# @api_bp.route('/register_summary_bar', methods=['GET', 'POST'])
-# def register_summary_bar():
-#     '''
-#     query = (
-#         Regist.select(
-#             Subject.name #科目名
-#         )
-#         .join(Subject, on=(Subject.name == Regist.subject))  # 明示的にProductとの結合条件を指定
-#         .group_by(Subject.name)  # 履修登録した生徒ごとにグループ化
-#         .order_by(fn.COUNT(Regist.user))  # 履修登録した生徒数
-#     )
-#     '''
-#     print('pass')
-#     query = (
-#         Regist.select(Subject.name)  # 科目名を選択
-#         .join(Subject, on=(Subject.name == Regist.subject))  # 結合条件を指定
-#         .group_by(Subject.name)  # 科目名でグループ化
-#     )
-    
-#     grouped_count = len(list(query))
+@api_bp.route('/register_summary_bar', methods=['GET', 'POST'])
+def register_summary_bar():
+    query = (
+        Regist.select(
+            Subject.name, 
+            fn.COUNT(Regist.user).alias('user_count')
+        )
+        .join(Subject, on=(Subject.id == Regist.subject))
+        .group_by(Subject.name)
+        .order_by(fn.COUNT(Regist.user).desc())
+    )
 
-#     print(query)
-#     # ここに書く
+    regist_data = {result.subject.name: result.user_count for result in query}
 
-# # 返す型はjson
-# # 教科ごとの履修登録者を返す
-# # key=教科名, value=その科目の履修者の数 但し、TOP5のみ返す
-# @api_bp.route('/register_summary_ranking', methods=['GET', 'POST'])
-# def register_summary_ranking():
-#     # ここに書く
-#     pass
+    # JSON形式で返す
+    result = {
+        'labels': list(regist_data.keys()),
+        'data': list(regist_data.values())
+    }
+
+    return jsonify(result)
+
+# 返す型はjson
+# 教科ごとの履修登録者を返す
+# key=教科名, value=その科目の履修者の数 但し、TOP5のみ返す
+@api_bp.route('/register_summary_ranking', methods=['GET', 'POST'])
+def register_summary_ranking():
+    query = (
+        Regist.select(
+            Subject.name, 
+            fn.COUNT(Regist.user).alias('user_count')
+        )
+        .join(Subject, on=(Subject.id == Regist.subject))
+        .group_by(Subject.name)
+        .order_by(fn.COUNT(Regist.user).desc())
+        .limit(5)
+    )
+
+    regist_data = {result.subject.name: result.user_count for result in query}
+
+    # JSON形式で返す
+    result = {
+        'labels': list(regist_data.keys()),
+        'data': list(regist_data.values())
+    }
+
+    return jsonify(result)
+
 
 # 返す型はjson
 # 生徒ごとに履修合計単位数を返す
@@ -62,6 +79,7 @@ def credit_summary_bar():
         'labels': list(students_data.keys()),
         'data': list(students_data.values())
     }
+    print(result)
     
     return jsonify(result)
     
