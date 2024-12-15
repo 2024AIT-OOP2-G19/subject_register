@@ -37,3 +37,47 @@ th {
 .breadcrumb li:nth-last-child()::after {
   content: "";
 }
+
+section {
+  margin: 20px;
+  padding: 20px;
+  width: 800px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.chart {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.ranking {
+  display: flex;
+  height: 100;
+  width: 100%;
+}
+
+.header {
+
+  display: flex;
+  height: 100px;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.header h1 {
+  margin-left: 20px;
+}
+
+.header ul {
+  display: flex;
+}
+
+.header li {
+  margin: 20px;
+  display: flex;
+}
